@@ -10,9 +10,6 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "setupFiles": [
-      "./src/jest/setEnvVars.ts"
-    ],
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./src/test/setup.ts"
