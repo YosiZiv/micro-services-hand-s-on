@@ -1,19 +1,19 @@
 name: deploy-auth
-on: 
+on:
   push:
-    branches: 
-      - master 
+    branches:
+      - master
     paths:
-      - 'auth/**'
+      - "auth/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
-      - run: cd auth && docker build -t katlany/auth . 
+      - run: cd auth && docker build -t katlany/auth .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        env: 
-          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}} 
-          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}} 
-      -run: docker push katlany/auth 
+        env:
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      - run: docker push katlany/auth
