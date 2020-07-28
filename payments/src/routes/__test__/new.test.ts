@@ -4,7 +4,7 @@ import { OrderStatus } from "@yztickets/common";
 import { app } from "../../app";
 import { Order } from "../../models/order";
 import { stripe } from "../../stripe";
-import { Payment } from "../../models/payment";
+
 it("returns a 404 when purchasing an order that does not exist", async () => {
   await request(app)
     .post("/api/payments")
@@ -72,15 +72,8 @@ it("returns a 201 with a valid inputs", async () => {
     .set("Cookie", global.signin(userId))
     .send({ token: "tok_visa", orderId: order.id })
     .expect(201);
-  const stripeCharges = await stripe.charges.list({ limit: 50 });
-  const stripeCharge = stripeCharges.data.find(
-    (charge) => charge.amount === price * 100
-  );
-  expect(stripeCharge).toBeDefined();
-  expect(stripeCharge?.currency).toEqual("usd");
-  const payment = await Payment.findOne({
-    orderId: order.id,
-    stripeId: stripeCharge?.id,
-  });
-  expect(payment).not.toBeNull();
+  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
+  expect(chargeOptions.source).toEqual("tok_visa");
+  expect(chargeOptions.amount).toEqual(order.price * 100);
+  expect(chargeOptions.currency).toEqual("usd");
 });
