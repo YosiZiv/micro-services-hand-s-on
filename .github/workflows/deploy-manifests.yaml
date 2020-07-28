@@ -5,7 +5,7 @@ on:
       - master
     paths:
       - "infra/**"
-# commant
+# commant2
 jobs:
   build:
     runs-on: ubuntu-latest
